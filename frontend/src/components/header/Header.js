@@ -3,50 +3,35 @@ import '../../App.css';
 import { Tooltip } from "flowbite-react";
 import LogoSnap from '../../assets/logo-minimal-light.png'
 import ModalProfile from '../modalProfile/ModalProfile';
+import NavButton from '../button/NavButton';
 
-const Header = () => {
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
+const Header = React.memo(({text}) => {
     return (
         <div>
-            
-            <header className="bg-[#E4E1DA] flex h-20 w-screen items-center justify-between">
+            <header className="bg-[#E4E1DA] flex h-20 w-full items-center justify-between">
                 <img className="mx-20 h-14" src={LogoSnap} alt="Logo Snap Grande"/>
+                <p className="font-bold text-xl">{text}</p>
+                <p className="text-[#E4E1DA]">SEGREDOOOOOOOOOOOOOOOOOOOOOOOO0000000000OOOOOOOOOOOOOOOOOOO</p>
                 <div className="flex gap-10 mx-20">
                     <div className="my-photoshoots">
                         <Tooltip content="Meus ensaios">
-                            <span class="material-symbols-outlined cursor-pointer p-2 hover:bg-white hover:bg-opacity-60 rounded-full">
-                                folder_copy
-                            </span>
+                            <NavButton icon={<span className="material-symbols-outlined">folder_copy</span>}/>
                         </Tooltip>
                     </div>
-                    <div className="my-profile" onClick={openModal}>
+                    <div className="my-profile">
                         <Tooltip content="Minha conta">
-                            <span class="material-symbols-outlined cursor-pointer p-2 hover:bg-white hover:bg-opacity-60 rounded-full">
-                                account_circle
-                            </span>
+                            <NavButton icon={<span className="material-symbols-outlined">account_circle</span>}/>
                         </Tooltip>
                     </div>
                     <div className="logout">
                         <Tooltip content="Sair">
-                            <span class="material-symbols-outlined cursor-pointer p-2 hover:bg-white hover:bg-opacity-60 rounded-full">
-                                logout
-                            </span>
+                            <NavButton icon={<span className="material-symbols-outlined">logout</span>}/>
                         </Tooltip>
                     </div>
                 </div>
             </header>
         </div>
     );
-}
+});
 
 export default Header;
