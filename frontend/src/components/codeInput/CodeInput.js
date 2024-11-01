@@ -1,3 +1,4 @@
+import '../../App.css';
 import React, { useState } from "react";
 
 const CodeInput = () => {
@@ -34,7 +35,7 @@ const CodeInput = () => {
                 value={num}
                 onChange={(e) => handleChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                className="w-16 h-16 border border-gray-300 rounded-2xl text-center text-3xl focus:outline-none focus:ring-2 focus:ring-gray-500 mt-5 mb-6 mx-1"
+                className="inputText w-16 h-16 border border-gray-300 rounded-2xl text-center text-3xl focus:outline-none focus:ring-2 focus:ring-gray-500 mt-5 mb-6 mx-1"
             />
         ))}
         <button className="bg-zinc-950 hover:bg-zinc-800 text-2xl text-white px-32 py-3 rounded-full"> CONTINUAR </button>
