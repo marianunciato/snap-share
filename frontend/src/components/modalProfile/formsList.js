@@ -4,7 +4,7 @@ import InputDefault from '../input/Input';
 import InputPassword from '../input/InputPassword';
 import InputEmail from '../input/InputEmail';
 
-const FormsList = React.memo(({}) => {
+const FormsList = React.memo(() => {
 
     return (
         <div className="lista-forms-perfil">

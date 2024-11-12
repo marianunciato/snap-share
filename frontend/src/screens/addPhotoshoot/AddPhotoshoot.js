@@ -7,9 +7,8 @@ import ToggleMarcaDagua from '../../components/toggle/ToggleMarcaDagua.js';
 import { Button, Select } from 'flowbite-react';
 import DropzoneDefault from '../../components/dropzone/Dropzone.js';
 import LabelDefault from "../../components/label/Label.js"
-import GoBack from '../../components/goBack/GoBack.js';
 
-const AddPhotoshoot = () => {
+const AddPhotoshoot = React.memo(() => {
 
     return (
         <div className="flex flex-col bg-slate-50 h-screen w-full">
@@ -79,6 +78,6 @@ const AddPhotoshoot = () => {
             </div>
         </div>
     );
-}
+});
 
 export default AddPhotoshoot;

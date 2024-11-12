@@ -1,12 +1,18 @@
 import React, {useState} from 'react';
 import '../../App.css';
-import { Button, Tooltip } from "flowbite-react";
+import { Tooltip } from "flowbite-react";
 import LogoSnap from '../../assets/logo-minimal-light.png'
 import ModalProfile from '../modalProfile/ModalProfile';
 import NavButton from '../button/NavButton';
 import GoBack from '../goBack/GoBack';
 
 const Header = React.memo(({text, showGoBack, showPageTitle}) => {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
     return (
         <div>
             <header className="bg-[#E4E1DA] flex h-20 w-full items-center justify-between">
@@ -42,7 +48,7 @@ const Header = React.memo(({text, showGoBack, showPageTitle}) => {
                                 </div>
                                 <div className="flex flex-row gap-3 mx-2">
                                     <Tooltip style="light" placement="bottom" content="Editar perfil">
-                                        <NavButton icon={<span className="material-symbols-outlined">border_color</span>}/>
+                                        <NavButton icon={<span className="material-symbols-outlined">border_color</span>} onClick={openModal}/>
                                     </Tooltip>
                                     <Tooltip style="light" placement="bottom" content="Sair">
                                         <NavButton icon={<span className="material-symbols-outlined">logout</span>}/>
@@ -55,6 +61,7 @@ const Header = React.memo(({text, showGoBack, showPageTitle}) => {
                     </div>
                 </div>
             </header>
+            {isModalOpen && <ModalProfile closeModal={closeModal}/>}
         </div>
     );
 });
