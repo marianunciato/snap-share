@@ -11,7 +11,7 @@ function App() {
             <Router>
                 <div className="App flex">
                     <Routes>
-                    <Route path="/accesscode" element={<AccessCode/>}/>
+                    <Route path="/accesscode/:id" element={<AccessCode isClient={true}/>}/>
                     <Route path="/mainpage" element={<MainPage/>}/>
                     <Route path="/addphotoshoot" element={<AddPhotoshoot/>}/>   
                     <Route path="/modalprofile" element={<ModalProfile/>}/>
