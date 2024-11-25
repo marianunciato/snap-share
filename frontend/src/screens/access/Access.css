@@ -1,0 +1,4 @@
+body {
+    display: flex;
+    background: url("../../assets/backdrop-login.png")
+}

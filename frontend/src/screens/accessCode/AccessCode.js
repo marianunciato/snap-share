@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import logoLight from "../../assets/logo-light.png";
 import loginBackground from "../../assets/login-background.png";
@@ -11,15 +11,24 @@ const Login = ({ isClient }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const inputsRef = useRef([]);
 
   const handleInputChange = (index, value) => {
     if (!isNaN(value) && value.length <= 1) {
       const newCode = [...code];
       newCode[index] = value;
       setCode(newCode);
-      // Auto-focus para o próximo campo
-      if (value && index < code.length - 1) {
-        document.getElementById(`input-${index + 1}`).focus();
+  
+      if (value) {
+        // Auto-focar para o próximo campo quando algo é digitado
+        if (index < code.length - 1) {
+          document.getElementById(`input-${index + 1}`).focus();
+        }
+      } else {
+        // Auto-focar para o campo anterior quando algo é apagado
+        if (index > 0) {
+          document.getElementById(`input-${index - 1}`).focus();
+        }
       }
     }
   };
@@ -37,7 +46,7 @@ const Login = ({ isClient }) => {
           `https://snap-share.glitch.me/albums/${id}`
         );
         console.log("Dados do cliente:", response.data);
-        if (response.data.access_hash == codeValue) {
+        if (response.data.access_hash === codeValue) {
           navigate(`/client-albums?id=${id}&code=${codeValue}`);
         } else {
           alert(
@@ -53,21 +62,21 @@ const Login = ({ isClient }) => {
 
   return (
     <div
-      className="h-screen w-screen flex justify-center items-center bg-cover bg-center"
+      className="h-screen w-screen flex justify-center bg-cover bg-center"
       style={{ backgroundImage: `url(${loginBackground})` }}
     >
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-      <div className="relative z-10 bg-neutral-50 shadow-lg rounded-md p-8 w-full max-w-md text-center">
+      <div className="relative z-10 bg-neutral-50 shadow-lg rounded-b-xl p-8 h-max w-full max-w-md text-center">
         <img
           src={logoLight}
           alt="Snap Share Logo"
-          className="mx-auto mb-6 w-32"
+          className="mx-auto m-5 w-56"
         />
 
         <h2 className="text-xl font-semibold mb-4">LOGIN</h2>
         <div className="flex justify-center mb-6">
           <select
-            className="border border-gray-300 rounded-md px-4 py-2 text-sm"
+            className="border border-gray-300 w-full rounded-md px-4 py-2 text-sm"
             value={isPhotographer ? "Fotógrafo" : "Cliente"}
             onChange={(e) => setIsPhotographer(e.target.value === "Fotógrafo")}
           >
@@ -110,7 +119,7 @@ const Login = ({ isClient }) => {
                   maxLength="1"
                   value={num}
                   onChange={(e) => handleInputChange(index, e.target.value)}
-                  className="w-12 h-12 text-center text-xl border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-14 h-14 text-center text-2xl font-extrabold border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               ))}
             </div>
@@ -118,7 +127,7 @@ const Login = ({ isClient }) => {
         )}
         <button
           onClick={handleSubmit}
-          className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition"
+          className="bg-black text-white px-6 py-2 w-full rounded-md hover:bg-gray-800 transition"
         >
           ENTRAR
         </button>
