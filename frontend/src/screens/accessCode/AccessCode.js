@@ -18,7 +18,7 @@ const Login = ({ isClient }) => {
       const newCode = [...code];
       newCode[index] = value;
       setCode(newCode);
-  
+
       if (value) {
         // Auto-focar para o próximo campo quando algo é digitado
         if (index < code.length - 1) {
@@ -35,17 +35,39 @@ const Login = ({ isClient }) => {
 
   const handleSubmit = async () => {
     if (isPhotographer) {
-      console.log("Login do Fotógrafo:", { email, password });
-      navigate(`/dashboard?role=photographer&id=${id}`);
+      try {
+        // Requisição para a rota de login do fotógrafo
+        const response = await axios.post(
+          "https://snap-share.glitch.me/photographers/login",
+          {
+            email,
+            password,
+          }
+        );
+
+        // Se o login for bem-sucedido
+
+        const photographer = await axios.get(
+          `https://snap-share.glitch.me/photographers/${response.data.photographer.id}`
+        );
+        delete photographer.data.password;
+        sessionStorage.setItem("data-ph", JSON.stringify(photographer.data));
+        navigate(`/mainpage/${photographer.data.id}`);
+      } catch (error) {
+        // Exibe um alerta em caso de falha no login
+        console.error("Erro no login do fotógrafo:", error);
+        alert("Email ou senha inválidos. Por favor, tente novamente.");
+      }
     } else {
       const codeValue = code.join("");
 
       try {
-        // Fazendo a requisição à API
+        // Fazendo a requisição à API para validação do cliente
         const response = await axios.get(
           `https://snap-share.glitch.me/albums/${id}`
         );
         console.log("Dados do cliente:", response.data);
+
         if (response.data.access_hash === codeValue) {
           navigate(`/client-albums?id=${id}&code=${codeValue}`);
         } else {
@@ -73,17 +95,10 @@ const Login = ({ isClient }) => {
           className="mx-auto m-5 w-56"
         />
 
-        <h2 className="text-xl font-semibold mb-4">LOGIN</h2>
-        <div className="flex justify-center mb-6">
-          <select
-            className="border border-gray-300 w-full rounded-md px-4 py-2 text-sm"
-            value={isPhotographer ? "Fotógrafo" : "Cliente"}
-            onChange={(e) => setIsPhotographer(e.target.value === "Fotógrafo")}
-          >
-            <option value="Cliente">Cliente</option>
-            <option value="Fotógrafo">Fotógrafo</option>
-          </select>
-        </div>
+        <h2 className="text-xl font-semibold mb-4">
+          {isPhotographer ? "LOGIN" : "Acesse seu álbum de fotos"}
+        </h2>
+        <div className="flex justify-center mb-6"></div>
         {isPhotographer ? (
           // Campos para fotógrafo
           <div className="space-y-4 mb-6">

@@ -59,14 +59,6 @@ const AddPhotoshoot = React.memo(() => {
                                     <option>200 fotos</option>
                                 </Select>
                             </div>
-                            <div className="w-1/3">
-                                <LabelDefault text="Tempo de disponibilidade das fotos" icon={<span className="material-symbols-outlined">date_range</span>}/>
-                                <Select id="countries" required>
-                                    <option>7 dias</option>
-                                    <option>15 dias</option>
-                                    <option>1 mês</option>
-                                </Select>
-                            </div>
                         </div>
                     </div>
                     <hr className="mt-2"/>
