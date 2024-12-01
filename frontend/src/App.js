@@ -8,6 +8,7 @@ import MainPage from "./screens/mainPage/MainPage";
 import AccessCode from "./screens/accessCode/AccessCode";
 import AddPhotoshoot from "./screens/addPhotoshoot/AddPhotoshoot";
 import PhotoShootsFromFoldernPage from "./screens/PhotoShootsFromFolder/PhotoShootsFromFolder";
+import PhotoShoot from "./screens/photoShoot/PhotoShoot"
 import "./App.css";
 
 function App() {
@@ -38,6 +39,14 @@ function App() {
                 path="/addphotoshoot/:folderId"
                 element={<AddPhotoshoot />}
               />
+              <Route
+                path="/photoshoot/:photoShootId"
+                element={
+                  <PhotoShoot
+                    maxSelectable={5}
+                  />
+                }
+              />
             </>
           ) : (
             // Se o usuário não estiver logado, redireciona para a página de acesso
@@ -46,7 +55,10 @@ function App() {
                 path="/mainpage/:photographerId"
                 element={<Navigate to="/" />}
               />
-              <Route path="/addphotoshoot/:folderId" element={<Navigate to="/" />} />
+              <Route
+                path="/addphotoshoot/:folderId"
+                element={<Navigate to="/" />}
+              />
               <Route path="/album/:albumId" element={<Navigate to="/" />} />
             </>
           )}

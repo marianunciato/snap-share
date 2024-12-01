@@ -34,6 +34,7 @@ const PhotoShootsFromFoldernPage = React.memo(() => {
 
   // Função para criar uma nova pasta
   const redirectToPhotoShoot = async (photoShoot) => {
+    navigate(`/photoshoot/${photoShoot.id}`);
     try {
     } catch (error) {
       console.error("Erro ao criar ensaio:", error);
@@ -42,7 +43,7 @@ const PhotoShootsFromFoldernPage = React.memo(() => {
 
   return (
     <div className="flex flex-col bg-slate-50 item h-screen w-full item">
-      <Header text="Pastas > Ensaios" showGoBack={false} showPageTitle={true} />
+      <Header text="Pastas > Ensaios" showGoBack={true} showPageTitle={true} />
       <div className="flex items-center justify-center">
         <div className="flex bg-[#F3F3F3] justify-center items-center mt-16 px-5 py-7 w-[1250px] gap-3 h-auto flex-wrap rounded-xl">
           <div onClick={redirectToNewPhotoShoot}>
