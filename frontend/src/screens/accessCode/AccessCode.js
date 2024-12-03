@@ -12,6 +12,7 @@ const Login = ({ isClient }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const inputsRef = useRef([]);
+  sessionStorage.clear();
 
   const handleInputChange = (index, value) => {
     if (!isNaN(value) && value.length <= 1) {
@@ -64,12 +65,13 @@ const Login = ({ isClient }) => {
       try {
         // Fazendo a requisição à API para validação do cliente
         const response = await axios.get(
-          `https://snap-share.glitch.me/albums/${id}`
+          `https://snap-share.glitch.me/albums/access_hash/${codeValue}`
         );
         console.log("Dados do cliente:", response.data);
 
-        if (response.data.access_hash === codeValue) {
-          navigate(`/client-albums?id=${id}&code=${codeValue}`);
+        if (response.data.id == id) {
+          sessionStorage.setItem("hash-cl", codeValue);
+          navigate(`/photoshoot/${id}`);
         } else {
           alert(
             "Não foi possível acessar o álbum com o código informado. Verifique o código e tente novamente."

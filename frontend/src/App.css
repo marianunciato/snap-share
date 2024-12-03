@@ -30,13 +30,13 @@
 
 /* Header ocupa largura total */
 .gallery-header {
-  @apply flex justify-between items-center w-full px-16 pt-16;
+  @apply flex justify-between items-center mx-48 p-4 mt-16 bg-[#F3F3F3] rounded-xl;
 }
 
 
 /* Fotos padronizadas */
 .photo-grid {
-  @apply grid gap-4 grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 p-16;
+  @apply grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 mx-48 mt-4 mb-8 p-8 bg-[#F3F3F3] rounded-xl;
 }
 
 .photo-card {
@@ -87,4 +87,61 @@
 
 .navigation button:last-child {
   @apply absolute right-4;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  height: 250px; /* Altura fixa */
+  overflow-y: auto; /* Rolagem apenas na área */
+  border-radius: 8px; /* Bordas arredondadas */
+}
+
+.preview-grid img {
+  object-fit: cover;
+  width: 100%;
+  height: 100px; /* Define uma altura fixa para as imagens */
+  border-radius: 4px; /* Bordas arredondadas para as imagens */
+}
+
+.preview-grid::-webkit-scrollbar {
+  width: 2px !important; /* Largura do scroll */
+}
+
+.preview-grid::-webkit-scrollbar-thumb {
+  background-color: #555; /* Cor do scroll */
+  border-radius: 4px;
+}
+
+.preview-grid::-webkit-scrollbar-track {
+  background-color: #222; /* Cor do fundo do scroll */
+}
+
+/* Ajustes para garantir que o botão de salvar não sobreponha */
+.new-photoshoot {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between; /* Garante que o botão vai para o rodapé */
+}
+
+.new-photoshoot > .flex-1 {
+  flex-grow: 1;
+  overflow-y: auto; /* Rolagem para o conteúdo */
+}
+
+.new-photoshoot > .flex-1 > .mt-4 {
+  padding-bottom: 80px; /* Ajuste para não sobrepor com o botão */
+}
+
+
+.logo-preview img {
+  max-width: 150px;  /* Limita a largura máxima a 150px */
+  width: 100%;       /* Ajusta para ocupar até 150px de largura */
+  height: auto;      /* Mantém a proporção da imagem */
 }
