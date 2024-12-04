@@ -8,13 +8,24 @@ import MainPage from "./screens/mainPage/MainPage";
 import AccessCode from "./screens/accessCode/AccessCode";
 import AddPhotoshoot from "./screens/addPhotoshoot/AddPhotoshoot";
 import PhotoShootsFromFoldernPage from "./screens/PhotoShootsFromFolder/PhotoShootsFromFolder";
-import PhotoShoot from "./screens/photoShoot/PhotoShoot"
+import PhotoShoot from "./screens/photoShoot/PhotoShoot";
 import "./App.css";
 
 function App() {
   function checkIsLogged() {
     return !!sessionStorage.getItem("data-ph")?.length;
   }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const element = document.getElementById("resize-element");
+    const resizeObserver = new ResizeObserver((entries) => {
+      requestAnimationFrame(() => {
+        console.log("Element resized:", entries[0].contentRect);
+      });
+    });
+
+    resizeObserver.observe(element);
+  });
 
   return (
     <Router>
@@ -41,11 +52,7 @@ function App() {
               />
               <Route
                 path="/photoshoot/:photoShootId"
-                element={
-                  <PhotoShoot
-                    maxSelectable={5}
-                  />
-                }
+                element={<PhotoShoot maxSelectable={5} />}
               />
             </>
           ) : (

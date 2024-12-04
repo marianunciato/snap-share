@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import para acessar os parâmetros da rota
+import { useParams, useNavigate } from "react-router-dom";
 import "../../App.css";
 import PhotoFolder from "../../components/photoFolder/PhotoFolder";
 import Header from "../../components/header/Header";
 import DeleteModal from "../../components/modalDelete/DeleteModal";
 import CreateFolderModal from "../../components/modalCreateFolder/modalCreateFolder";
-import axios from "axios"; // Biblioteca para fazer chamadas HTTP
+import OptionsModal from "../../components/optionsModal/OptionsModal";
+import axios from "axios";
 
 const MainPage = React.memo(() => {
   const [folders, setFolders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para pesquisa
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState(null);
-  const [isNewFolderModalOpen, setIsNewFolderModalOpen] = useState(false); // Para controlar a exibição da modal de nova pasta
-  const [newFolderName, setNewFolderName] = useState(""); // Armazenar o nome da nova pasta
+  const [isNewFolderModalOpen, setIsNewFolderModalOpen] = useState(false);
+  const [editingFolder, setEditingFolder] = useState(null);
+  const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
 
-  const { photographerId } = useParams(); // Obtendo o ID do fotógrafo pela rota
-  const navigate = useNavigate(); // Hook para navegação
+  const { photographerId } = useParams();
+  const navigate = useNavigate();
 
-  // Função para buscar dados da API
   useEffect(() => {
     const fetchFolders = async () => {
       try {
@@ -26,16 +28,35 @@ const MainPage = React.memo(() => {
         );
         setFolders(response.data);
       } catch (error) {
-        console.error("Erro ao buscar pastas:", error);
+        console.error("Erro ao buscar clientes:", error);
       }
     };
 
     if (photographerId) fetchFolders();
   }, [photographerId]);
 
-  const openDeleteModal = (folder) => {
-    setSelectedFolder(folder);
-    setIsDeleteModalOpen(true);
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // Atualiza o valor de pesquisa
+  };
+
+  const filteredFolders = folders.filter((folder) =>
+    folder.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filtra pastas pelo nome
+  );
+
+  const handleCreateNewFolder = async (folderName) => {
+    try {
+      await axios.post(`https://snap-share.glitch.me/folders`, {
+        name: folderName,
+        photographer_id: photographerId,
+      });
+      const response = await axios.get(
+        `https://snap-share.glitch.me/folders/${photographerId}/folders`
+      );
+      setFolders(response.data); // Atualiza as clientes com a nova lista
+      setIsNewFolderModalOpen(false); // Fecha o modal após a criação
+    } catch (error) {
+      console.error("Erro ao criar novo cliente:", error);
+    }
   };
 
   const closeDeleteModal = () => {
@@ -43,90 +64,135 @@ const MainPage = React.memo(() => {
     setSelectedFolder(null);
   };
 
-  const handleDeleteFolder = () => {
-    closeDeleteModal();
-    console.log("Folder deleted:", selectedFolder);
-    // Aqui você pode adicionar uma chamada para excluir a pasta na API
-  };
+  const handleDeleteFolder = async () => {
+    if (!editingFolder) {
+      console.error("Nenhuma cliente selecionada para exclusão");
+      return;
+    }
 
-  // Função para abrir a modal de nova pasta
-  const openNewFolderModal = () => {
-    setIsNewFolderModalOpen(true);
-  };
-
-  // Função para fechar a modal de nova pasta
-  const closeNewFolderModal = () => {
-    setIsNewFolderModalOpen(false);
-    setNewFolderName(""); // Limpar o campo ao fechar a modal
-  };
-
-  // Função para criar uma nova pasta
-  const handleCreateNewFolder = async (folderName) => {
     try {
-      // Enviar a requisição para criar uma nova pasta
-      await axios.post(`https://snap-share.glitch.me/folders`, {
-        name: folderName,
-        photographer_id: photographerId,
-      });
-      // Recarregar as pastas com a nova pasta criada
-      const response = await axios.get(
-        `https://snap-share.glitch.me/folders/${photographerId}/folders`
+      await axios.delete(
+        `https://snap-share.glitch.me/folders/${editingFolder.id}`
       );
-      setFolders(response.data); // Atualiza as pastas com a resposta da API
-      closeNewFolderModal(); // Fechar a modal após a criação
+      setFolders((prevFolders) =>
+        prevFolders.filter((folder) => folder.id !== editingFolder.id)
+      );
+      closeEditModal();
     } catch (error) {
-      console.error("Erro ao criar pasta:", error);
+      console.error("Erro ao excluir cliente:", error);
     }
   };
 
-  // Função para navegar até a página de visualização de uma pasta
+  const openEditModal = (folder) => {
+    setEditingFolder(folder);
+    setIsOptionsModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsOptionsModalOpen(false);
+    setEditingFolder(null);
+  };
+
+  const handleEditFolder = async (folderName) => {
+    try {
+      const payload = {
+        name: folderName,
+        photographer_id: photographerId, // Inclui o ID do fotógrafo no payload
+      };
+
+      await axios.put(
+        `https://snap-share.glitch.me/folders/${editingFolder.id}`,
+        payload
+      );
+
+      setFolders((prevFolders) =>
+        prevFolders.map((folder) =>
+          folder.id === editingFolder.id
+            ? { ...folder, name: folderName }
+            : folder
+        )
+      );
+      closeEditModal();
+    } catch (error) {
+      console.error("Erro ao editar cliente:", error);
+    }
+  };
+
   const handleOpenFolder = (folderId) => {
-    navigate(`/folder/${folderId}`); // Rota para visualizar o conteúdo de uma pasta
+    navigate(`/folder/${folderId}`);
   };
 
   return (
     <div className="flex flex-col bg-slate-50 item h-screen w-full item">
-      <Header text="Minhas Pastas" showGoBack={false} showPageTitle={true} />
-      <div className="flex items-center justify-center">
-        <div className="flex bg-[#F3F3F3] justify-center items-center mt-16 px-5 py-7 w-[1250px] gap-3 h-auto flex-wrap rounded-xl">
-          <div onClick={openNewFolderModal}>
-            <PhotoFolder text={"Nova pasta"} isNewItem={true} />
+      <Header text="Clientes" showGoBack={false} showPageTitle={true} />
+
+      <div className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg max-w-[1250px] w-full my-4 mx-auto">
+        <input
+          type="text"
+          placeholder="Pesquisar por nome do cliente"
+          value={searchTerm}
+          onChange={handleSearchChange} // Atualiza a pesquisa ao digitar
+          className="px-4 rounded-md border border-gray-300 flex-grow"
+        />
+      </div>
+
+      <div className="flex items-center justify-center ">
+        <div className="flex bg-[#F3F3F3] justify-center items-center px-5 py-7 w-[1250px] gap-3 h-auto flex-wrap rounded-xl">
+          <div onClick={() => setIsNewFolderModalOpen(true)}>
+            <PhotoFolder text={"Novo cliente"} isNewItem={true} isClient={false} />
           </div>
 
-          {/* Pastas da API */}
-          {folders.length > 0 ? (
-            folders.map((folder) => (
+          {filteredFolders.length > 0 ? (
+            filteredFolders.map((folder) => (
               <div
                 key={folder.id}
-                onClick={() => handleOpenFolder(folder.id)} // Redireciona para a página da pasta
+                className="relative"
+                onClick={() => handleOpenFolder(folder.id)} // Permite clicar na cliente para navegar
               >
                 <PhotoFolder
-                  key={folder.id}
-                  openDeleteModal={() => openDeleteModal(folder.name)}
                   text={folder.name}
                   isNewItem={false}
+                  isClient={true}
+                  className="cursor-pointer"
                 />
+                <button
+                  className="absolute bottom-2 right-2 text-gray-600 hover:text-black"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Evita o clique na cliente ao abrir o menu
+                    openEditModal(folder);
+                  }}
+                >
+                  <span className="material-symbols-outlined">edit</span>
+                </button>
               </div>
             ))
           ) : (
-            <p>Carregando pastas...</p>
+            <p>Carregando clientes...</p>
           )}
         </div>
       </div>
 
       {isDeleteModalOpen && (
         <DeleteModal
-          folderName={selectedFolder}
+          folderName={selectedFolder?.name}
           onClose={closeDeleteModal}
           onConfirm={handleDeleteFolder}
         />
       )}
 
-      {/* Modal para Criar Nova Pasta */}
       {isNewFolderModalOpen && (
         <CreateFolderModal
-          onClose={closeNewFolderModal}
-          onCreate={handleCreateNewFolder}
+          onClose={() => setIsNewFolderModalOpen(false)}
+          onCreate={(name) => handleCreateNewFolder(name)}
+        />
+      )}
+
+      {isOptionsModalOpen && (
+        <OptionsModal
+          folder={editingFolder}
+          onClose={closeEditModal}
+          onSave={handleEditFolder}
+          onDelete={handleDeleteFolder} // Passa a função de exclusão para o modal
         />
       )}
     </div>

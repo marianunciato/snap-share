@@ -56,7 +56,7 @@ const AddPhotoshoot = React.memo(() => {
       );
       return;
     }
-
+  
     // 1. Criar o álbum através da rota /albums com axios
     const albumPayload = {
       download_count: 0,
@@ -64,49 +64,57 @@ const AddPhotoshoot = React.memo(() => {
       folder_id: folderId, // Pegando o folderId dos parâmetros da URL
       name: title, // Usando o título do ensaio
     };
-
+  
     let albumId;
-
+  
     try {
       const albumResponse = await axios.post(
         "https://snap-share.glitch.me/albums",
         albumPayload
       );
-
+  
       // Obtém o id do álbum
       albumId = albumResponse.data.id;
-
+  
       // 2. Enviar as imagens para /photos com axios
-      const photoPromises = images.map(async (image) => {
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const base64Image = reader.result.split(",")[1]; // Obtém a parte base64 da imagem
-          const photoPayload = {
-            url: base64Image,
-            album_id: albumId,
+      const photoPromises = images.map((image) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+  
+          reader.onloadend = async () => {
+            const base64Image = reader.result.split(",")[1]; // Obtém a parte base64 da imagem
+            const photoPayload = {
+              url: base64Image,
+              album_id: albumId,
+            };
+  
+            try {
+              await axios.post(
+                "https://snap-share.glitch.me/photos",
+                photoPayload
+              );
+              console.log("Imagem enviada com sucesso!");
+              resolve(); // Resolução da promessa quando a foto é enviada com sucesso
+            } catch (error) {
+              console.error("Erro ao enviar a foto:", error);
+              reject(error); // Rejeição da promessa caso haja erro no envio da foto
+            }
           };
-
-          try {
-            await axios.post(
-              "https://snap-share.glitch.me/photos",
-              photoPayload
-            );
-            console.log("Imagem enviada com sucesso!");
-          } catch (error) {
-            console.error("Erro ao enviar a foto:", error);
-          }
-        };
-        reader.readAsDataURL(image); // Converte a imagem para base64
+  
+          reader.onerror = (error) => reject(error); // Tratamento de erro no FileReader
+          reader.readAsDataURL(image); // Converte a imagem para base64
+        });
       });
-
-      // Espera todas as imagens serem enviadas
+  
+      // Espera todas as imagens serem enviadas antes de redirecionar
       await Promise.all(photoPromises);
-
+  
       console.log("Álbum criado e imagens enviadas com sucesso!");
+  
+      // Redirecionar após todas as requisições terminarem
+      navigate(`/photoshoot/${albumId}`);
     } catch (error) {
       console.error("Erro ao salvar:", error);
-    } finally {
-      navigate(`/photoshoot/${albumId}`);
     }
   };
 

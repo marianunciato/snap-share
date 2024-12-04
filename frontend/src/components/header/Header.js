@@ -39,12 +39,12 @@ const Header = React.memo(({ text, showGoBack, showPageTitle }) => {
         <div className="flex gap-10 mx-20">
           {!!photographer && (
             <div className="my-photoshoots">
-              <Tooltip content="Meus ensaios">
+              <Tooltip content="Meus clientes">
                 <NavButton
                   onClick={() => navigate(`/mainpage/${photographer?.id}`)}
                   icon={
                     <span className="material-symbols-outlined">
-                      folder_copy
+                      <span className="material-symbols-outlined">groups</span>
                     </span>
                   }
                 />

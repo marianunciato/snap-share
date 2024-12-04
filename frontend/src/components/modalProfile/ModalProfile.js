@@ -1,6 +1,5 @@
 import React from 'react';
 import '../../App.css';
-import { Button } from "flowbite-react";
 import FormsList from './formsList';
 
 const ModalProfile = React.memo(({ closeModal, photographer }) => {
@@ -24,12 +23,6 @@ const ModalProfile = React.memo(({ closeModal, photographer }) => {
                 {/* Modal Content */}
                 <div className="modal-content flex flex-col">
                     <FormsList />
-                    <hr className="mt-2" />
-                    <div className="flex justify-center items-center mt-3">
-                        <Button className="close-modal-btn bg-[#353438]">
-                            <b>Salvar</b>
-                        </Button>
-                    </div>
                 </div>
             </div>
         </div>

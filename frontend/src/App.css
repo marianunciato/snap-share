@@ -145,3 +145,5 @@
   width: 100%;       /* Ajusta para ocupar até 150px de largura */
   height: auto;      /* Mantém a proporção da imagem */
 }
+
+iframe#webpack-dev-server-client-overlay{display:none!important}

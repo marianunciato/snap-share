@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "../../components/header/Header";
 import { useNavigate } from "react-router-dom";
-import { Select } from "flowbite-react";
 import "../../App.css";
 
 const PhotoShoot = ({ maxSelectable }) => {
