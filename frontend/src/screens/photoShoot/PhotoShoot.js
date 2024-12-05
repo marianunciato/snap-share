@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../../components/header/Header";
-import { useNavigate } from "react-router-dom";
 import "../../App.css";
 
 const PhotoShoot = ({ maxSelectable }) => {
@@ -11,32 +10,62 @@ const PhotoShoot = ({ maxSelectable }) => {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [noContent, setnoContent] = useState(false);
+  const [noContent, setNoContent] = useState(false);
   const [albumInfo, setAlbumInfo] = useState(null);
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate();
+
   const photographer = JSON.parse(sessionStorage.getItem("data-ph"));
-  const client = JSON.parse(sessionStorage.getItem("hash-cl"));
+  const hashClient = JSON.parse(sessionStorage.getItem("hash-cl"));
 
   useEffect(() => {
-    const fetchPhotosAndAlbumInfo = async () => {
+    const validateAccess = async () => {
+      
+
+      try {
+        const albumResponse = await axios.get(
+          `https://snap-share.glitch.me/albums/${photoShootId}`
+        );
+        const albumData = albumResponse.data;
+
+        console.log(photographer?.id)
+        console.log(albumData?.photographer_id)
+        // Verifica se o fotógrafo tem permissão para acessar o álbum
+        if (photographer && photographer.id != albumData.photographer_id) {
+          navigate(`/mainpage/${photographer.id}`);
+          return;
+        }
+
+        if (!photographer && hashClient && hashClient != albumData.access_hash) {
+          navigate(`/accesscode/${photoShootId}`);
+          return;
+        }
+
+        setAlbumInfo(albumData);
+      } catch (error) {
+        console.error("Erro ao validar acesso:", error);
+        navigate(`/mainpage/${photographer?.id || ""}`);
+      }
+    };
+
+    validateAccess();
+  }, [photographer, hashClient, photoShootId, navigate]);
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
       setLoading(true);
       try {
         const photosResponse = await axios.get(
           `https://snap-share.glitch.me/photos/${photoShootId}/photos`
         );
         setPhotos(photosResponse.data);
-
-        const albumResponse = await axios.get(
-          `https://snap-share.glitch.me/albums/${photoShootId}`
-        );
-        setAlbumInfo(albumResponse.data);
       } catch (error) {
-        error.status === 404 && setnoContent(true);
+        if (error.response?.status === 404) setNoContent(true);
       } finally {
         setLoading(false);
       }
     };
-    fetchPhotosAndAlbumInfo();
+
+    fetchPhotos();
   }, [photoShootId]);
 
   const toggleSelectPhoto = (photoId) => {
@@ -84,16 +113,12 @@ const PhotoShoot = ({ maxSelectable }) => {
     });
   };
 
-  if (!photographer && !client) {
-    navigate(`/accesscode/${photoShootId}`);
-  }
-
   if (loading || noContent) {
     return (
       <div className="w-full">
         <Header
           className="w-screen"
-          text={noContent ? "Ensaio sem fotos" : `Carregando fotos...`}
+          text={noContent ? "Ensaio sem fotos" : "Carregando fotos..."}
           showGoBack={true}
           showPageTitle={true}
         />
@@ -105,7 +130,7 @@ const PhotoShoot = ({ maxSelectable }) => {
     <div className="photo-gallery w-full">
       <Header
         text={
-          !!photographer ? `Ensaios > ${albumInfo?.name}` : `${albumInfo?.name}`
+          photographer ? `Ensaios > ${albumInfo?.name}` : `${albumInfo?.name}`
         }
         showGoBack={true}
         showPageTitle={true}
@@ -145,13 +170,11 @@ const PhotoShoot = ({ maxSelectable }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="navigation">
-              <button onClick={(e) => navigatePhoto("prev", e)}>
-                Anterior
-              </button>
+              <button onClick={(e) => navigatePhoto("prev", e)}>Anterior</button>
               <button onClick={(e) => navigatePhoto("next", e)}>Próxima</button>
             </div>
             <div className="full-screen-controls">
-              <label className="flex items-center p-2 text-white justify-end ">
+              <label className="flex items-center p-2 text-white justify-end">
                 <input
                   type="checkbox"
                   checked={selectedPhotos.includes(

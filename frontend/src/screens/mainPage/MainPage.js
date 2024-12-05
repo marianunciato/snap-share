@@ -21,6 +21,14 @@ const MainPage = React.memo(() => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Verificação de sessionStorage
+    const sessionData = JSON.parse(sessionStorage.getItem("data-ph"));
+    if (!sessionData || sessionData.id != photographerId) {
+      navigate("/"); // Redireciona se não for autorizado
+    }
+  }, [photographerId, navigate]);
+
+  useEffect(() => {
     const fetchFolders = async () => {
       try {
         const response = await axios.get(
@@ -39,8 +47,8 @@ const MainPage = React.memo(() => {
     setSearchTerm(event.target.value); // Atualiza o valor de pesquisa
   };
 
-  const filteredFolders = folders.filter((folder) =>
-    folder.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filtra pastas pelo nome
+  const filteredFolders = folders.filter(
+    (folder) => folder.name.toLowerCase().includes(searchTerm.toLowerCase()) // Filtra pastas pelo nome
   );
 
   const handleCreateNewFolder = async (folderName) => {
@@ -139,7 +147,11 @@ const MainPage = React.memo(() => {
       <div className="flex items-center justify-center ">
         <div className="flex bg-[#F3F3F3] justify-center items-center px-5 py-7 w-[1250px] gap-3 h-auto flex-wrap rounded-xl">
           <div onClick={() => setIsNewFolderModalOpen(true)}>
-            <PhotoFolder text={"Novo cliente"} isNewItem={true} isClient={false} />
+            <PhotoFolder
+              text={"Novo cliente"}
+              isNewItem={true}
+              isClient={false}
+            />
           </div>
 
           {filteredFolders.length > 0 ? (
