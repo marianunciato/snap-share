@@ -127,7 +127,7 @@ const AddPhotoshoot = React.memo(() => {
       />
       <div className="flex justify-center items-center flex-col my-4 flex-1 overflow-hidden">
         <div className="new-photoshoot flex flex-col bg-[#F3F3F3] w-7/12 p-5 rounded-xl flex-1">
-          <div className="flex flex-col h-full overflow-auto">
+          <div className="flex flex-col h-full pr-1 overflow-auto">
             {/* Título */}
             <div className="step-one">
               <InputDefault
@@ -181,22 +181,20 @@ const AddPhotoshoot = React.memo(() => {
                 )}
               </div>
               {/* Configuração de Marca d'Água */}
-              <div className="watermark-settings flex flex-row justify-between items-center mt-2">
+              <div className="watermark-settings mt-2">
                 <div className="toggle-section flex-1">
                   <ToggleMarcaDagua
                     text="Adicionar marca d’água automaticamente"
                     onValueChange={setIsWatermarkEnabled}
                   />
                 </div>
-                <div className="logo-preview flex-1 flex justify-center">
-                  <div>
-                    <LabelDefault text="Pré-visualização da marca d'água" />
-                    <img
-                      src={logo}
-                      alt="Logo"
-                      className="object-contain h-16 w-auto mt-2"
-                    />
-                  </div>
+                <div className="logo-preview flex flex-col justify-center items-center">
+                  <img
+                    src={logo}
+                    alt="Logo"
+                    className="object-contain h-16 w-auto mt-2 shadow bg-white mb-3 px-4 rounded-lg"
+                  />
+                  <LabelDefault text="Pré-visualização da marca d'água"/>
                 </div>
               </div>
             </div>

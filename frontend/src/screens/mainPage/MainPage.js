@@ -133,7 +133,6 @@ const MainPage = React.memo(() => {
   return (
     <div className="flex flex-col bg-slate-50 item h-screen w-full item">
       <Header text="Clientes" showGoBack={false} showPageTitle={true} />
-
       <div className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg max-w-[1250px] w-full my-4 mx-auto">
         <input
           type="text"
@@ -168,7 +167,7 @@ const MainPage = React.memo(() => {
                   className="cursor-pointer"
                 />
                 <button
-                  className="absolute bottom-2 right-2 text-gray-600 hover:text-black"
+                  className="absolute bottom-2 right-5 text-gray-600 hover:text-black"
                   onClick={(e) => {
                     e.stopPropagation(); // Evita o clique na cliente ao abrir o menu
                     openEditModal(folder);

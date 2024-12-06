@@ -17,7 +17,10 @@ const CreateFolderModal = ({ onClose, onCreate }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-[#F3F3F3] rounded-lg w-[400px]">
                 <div className="p-5 rounded-t-lg">
-                    <p className="pb-2 text-lg">Criar novo cliente</p>
+                    <div className='flex justify-between items-center mb-2'>
+                        <p className="pb-2 text-lg">Criar novo cliente</p>
+                        <span onClick={onClose} class="material-symbols-outlined cursor-pointer hover:bg-white/75 p-1 rounded-full">close</span>
+                    </div>
                     <input
                         type="text"
                         value={folderName}
@@ -27,9 +30,8 @@ const CreateFolderModal = ({ onClose, onCreate }) => {
                     />
                 </div>
                 <hr />
-                <div className="flex justify-between m-3">
-                    <Button onClick={onClose} className="bg-slate-800">Cancelar</Button>
-                    <Button onClick={handleCreateClick} className="bg-blue-800 font-semibold text-white">Salvar</Button>
+                <div className="flex justify-end m-3">    
+                    <Button onClick={handleCreateClick} className="bg-green-700 font-semibold text-white">Salvar</Button>
                 </div>
             </div>
         </div>

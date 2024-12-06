@@ -253,14 +253,14 @@ const PhotoShoot = () => {
             <>
               <button
                 onClick={downloadSelectedPhotos}
-                className="mx-2 font-bold text-blue-950 bg-white p-2 rounded border-slate-800"
+                className="mx-2 font-bold text-blue-950 bg-white p-2 rounded-lg border-slate-800 hover:bg-blue-950 hover:text-white"
               >
                 Baixar Selecionadas
               </button>
               {photographer && (
                 <button
                   onClick={deleteSelectedPhotos}
-                  className="text-[red] mx-2 bg-white p-2 rounded border-slate-800"
+                  className="text-red-700 mx-2 bg-white p-2 rounded-lg font-semibold border-slate-800 hover:bg-red-700 hover:text-white"
                 >
                   Excluir Selecionadas
                 </button>
@@ -280,7 +280,7 @@ const PhotoShoot = () => {
           {photographer && (
             <label
               htmlFor="upload-input"
-              className="upload-button cursor-pointer text-[green] mx-2 bg-white p-2 rounded border-slate-800"
+              className="upload-button font-semibold cursor-pointer text-green-700 mx-2 bg-white p-3 rounded-lg border-slate-800 hover:bg-green-700 hover:text-white"
             >
               Adicionar Imagens
             </label>
@@ -318,10 +318,16 @@ const PhotoShoot = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="navigation">
-              <button className="mr-[60px]" onClick={(e) => navigatePhoto("prev", e)}>
-                Anterior
+              <button className="mr-[60px] h-12 w-12 rounded-full flex justify-center items-center" onClick={(e) => navigatePhoto("prev", e)}>
+                <span class="material-symbols-outlined">
+                  chevron_left
+                </span>
               </button>
-              <button className="ml-[60px]" onClick={(e) => navigatePhoto("next", e)}>Próxima</button>
+              <button className="ml-[60px] h-12 w-12 rounded-full flex justify-center items-center" onClick={(e) => navigatePhoto("next", e)}>
+                <span class="material-symbols-outlined">
+                  chevron_right
+                </span>
+              </button>
             </div>
             <div className="full-screen-controls">
               <label className="flex items-center p-2 text-white justify-end">

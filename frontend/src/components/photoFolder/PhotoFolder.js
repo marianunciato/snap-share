@@ -26,9 +26,8 @@ const PhotoFolder = React.memo(
             </span>
           )}
         </div>
-        <div className="flex justify-between w-[340px]">
-          <FolderLabel text={text} onDelete={handleDelete} />
-          
+        <div className="flex justify-around w-[340px]">
+          <FolderLabel text={text} onDelete={handleDelete}/>
           {/* Botão de editar */}
           {!isNewItem && onEdit && (
             <button

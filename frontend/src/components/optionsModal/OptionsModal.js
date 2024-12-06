@@ -26,7 +26,10 @@ const OptionsModal = ({ folder, onClose, onSave, onDelete }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-[#F3F3F3] rounded-lg w-[400px]">
         <div className="p-5 rounded-t-lg">
-          <p className="pb-2 text-lg">Editar Pasta</p>
+          <div className="flex justify-between">
+            <p className="pb-2 text-lg">Editar Pasta</p>
+            <span onClick={onClose} class="material-symbols-outlined">close</span>
+          </div>
           <input
             type="text"
             value={folderName}
@@ -37,18 +40,15 @@ const OptionsModal = ({ folder, onClose, onSave, onDelete }) => {
         </div>
         <hr />
         <div className="flex justify-between m-3 space-x-3">
-          <Button onClick={onClose} className="bg-slate-800 w-full">
-            Cancelar
-          </Button>
           <Button
             onClick={handleDeleteClick} // Chama a função para excluir a pasta
-            className="bg-red-600 font-semibold text-white w-full"
+            className="bg-red-700 w-32 font-semibold text-white"
           >
             Excluir
           </Button>
           <Button
             onClick={handleSaveClick}
-            className="bg-blue-800 font-semibold text-white w-full"
+            className="bg-green-700 w-32 font-semibold text-white"
           >
             Salvar
           </Button>

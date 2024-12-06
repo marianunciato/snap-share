@@ -28,8 +28,15 @@ const EditOrDeletePhotoShootModal = ({ photoShoot, onClose, onSave, onDelete }) 
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-[#F3F3F3] rounded-lg w-[400px]">
         <div className="p-5 rounded-t-lg">
-          <p className="pb-2 text-lg">Editar ou Excluir Ensaio</p>
-
+          <div className="flex justify-between items-center ">
+            <p className="pb-2 text-lg">Editar ou Excluir Ensaio</p>
+            <span 
+              onClick={onClose}
+              class="material-symbols-outlined cursor-pointer hover:bg-white/75 p-1 rounded-full"
+            >
+              close
+            </span>
+          </div>
           <InputDefault
             text="Nome do Ensaio"
             placeholder="Nome do ensaio"
@@ -61,16 +68,15 @@ const EditOrDeletePhotoShootModal = ({ photoShoot, onClose, onSave, onDelete }) 
         </div>
         <hr />
         <div className="flex justify-between m-3 space-x-3">
-          <Button onClick={onClose} className="bg-slate-800 w-full">Cancelar</Button>
           <Button
             onClick={handleDeleteClick}
-            className="bg-red-600 font-semibold text-white w-full"
+            className="bg-red-700 w-32 font-semibold text-white"
           >
             Excluir
           </Button>
           <Button
             onClick={handleSaveClick}
-            className="bg-blue-800 font-semibold text-white w-full"
+            className="bg-green-700 w-32 font-semibold text-white"
           >
             Salvar
           </Button>

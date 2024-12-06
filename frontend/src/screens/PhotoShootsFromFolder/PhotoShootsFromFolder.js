@@ -123,7 +123,7 @@ const PhotoShootsFromFoldernPage = React.memo(() => {
                   />
                 </div>
                 <button
-                  className="absolute bottom-2 right-2 text-gray-600 hover:text-black"
+                  className="absolute bottom-2 right-5 text-gray-600 hover:text-black"
                   onClick={(e) => {
                     e.stopPropagation(); // Evita o clique na pasta ao abrir o menu
                     openEditModal(photoShoot);
