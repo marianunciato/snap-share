@@ -27,7 +27,7 @@ const PhotoShoot = () => {
 
       try {
         const albumResponse = await axios.get(
-          `http://localhost:3001/albums/${photoShootId}`
+          `https://snap-share.glitch.me/albums/${photoShootId}`
         );
         const albumData = albumResponse.data;
         setmaxSelectable(
@@ -62,7 +62,7 @@ const PhotoShoot = () => {
       setLoading(true);
       try {
         const photosResponse = await axios.get(
-          `http://localhost:3001/photos/${photoShootId}/photos`
+          `https://snap-share.glitch.me/photos/${photoShootId}/photos`
         );
         setPhotos(photosResponse.data);
         setNoContent(photosResponse.data.length === 0);
@@ -109,7 +109,7 @@ const PhotoShoot = () => {
     try {
       await Promise.all(
         selectedPhotos.map((photoId) =>
-          axios.delete(`http://localhost:3001/photos/${photoId}`)
+          axios.delete(`https://snap-share.glitch.me/photos/${photoId}`)
         )
       );
 
@@ -125,7 +125,7 @@ const PhotoShoot = () => {
 
   const downloadSelectedPhotos = async () => {
     hashClient &&
-      (await axios.put(`http://localhost:3001/albums/${albumInfo.id}`, {
+      (await axios.put(`https://snap-share.glitch.me/albums/${albumInfo.id}`, {
         ...albumInfo,
         download_count: albumInfo.download_count + selectedPhotos.length,
       }));
@@ -158,7 +158,7 @@ const PhotoShoot = () => {
       for (const file of files) {
         const base64 = await convertToBase64(file);
 
-        const response = await axios.post(`http://localhost:3001/photos`, {
+        const response = await axios.post(`https://snap-share.glitch.me/photos`, {
           url: base64,
           album_id: Number(photoShootId),
         });

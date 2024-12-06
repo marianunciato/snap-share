@@ -39,7 +39,7 @@ const Login = ({ isClient }) => {
       try {
         // Requisição para a rota de login do fotógrafo
         const response = await axios.post(
-          "http://localhost:3001/photographers/login",
+          "https://snap-share.glitch.me/photographers/login",
           {
             email,
             password,
@@ -49,7 +49,7 @@ const Login = ({ isClient }) => {
         // Se o login for bem-sucedido
 
         const photographer = await axios.get(
-          `http://localhost:3001/photographers/${response.data.photographer.id}`
+          `https://snap-share.glitch.me/photographers/${response.data.photographer.id}`
         );
         delete photographer.data.password;
         sessionStorage.setItem("data-ph", JSON.stringify(photographer.data));
@@ -65,7 +65,7 @@ const Login = ({ isClient }) => {
       try {
         // Fazendo a requisição à API para validação do cliente
         const response = await axios.get(
-          `http://localhost:3001/albums/access_hash/${codeValue}`
+          `https://snap-share.glitch.me/albums/access_hash/${codeValue}`
         );
         console.log("Dados do cliente:", response.data);
 

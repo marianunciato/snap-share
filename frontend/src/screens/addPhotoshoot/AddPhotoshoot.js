@@ -69,7 +69,7 @@ const AddPhotoshoot = React.memo(() => {
   
     try {
       const albumResponse = await axios.post(
-        "http://localhost:3001/albums",
+        "https://snap-share.glitch.me/albums",
         albumPayload
       );
   
@@ -90,7 +90,7 @@ const AddPhotoshoot = React.memo(() => {
   
             try {
               await axios.post(
-                "http://localhost:3001/photos",
+                "https://snap-share.glitch.me/photos",
                 photoPayload
               );
               console.log("Imagem enviada com sucesso!");

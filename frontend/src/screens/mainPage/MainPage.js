@@ -32,7 +32,7 @@ const MainPage = React.memo(() => {
     const fetchFolders = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/folders/${photographerId}/folders`
+          `https://snap-share.glitch.me/folders/${photographerId}/folders`
         );
         setFolders(response.data);
       } catch (error) {
@@ -53,12 +53,12 @@ const MainPage = React.memo(() => {
 
   const handleCreateNewFolder = async (folderName) => {
     try {
-      await axios.post(`http://localhost:3001/folders`, {
+      await axios.post(`https://snap-share.glitch.me/folders`, {
         name: folderName,
         photographer_id: photographerId,
       });
       const response = await axios.get(
-        `http://localhost:3001/folders/${photographerId}/folders`
+        `https://snap-share.glitch.me/folders/${photographerId}/folders`
       );
       setFolders(response.data); // Atualiza as clientes com a nova lista
       setIsNewFolderModalOpen(false); // Fecha o modal após a criação
@@ -80,7 +80,7 @@ const MainPage = React.memo(() => {
 
     try {
       await axios.delete(
-        `http://localhost:3001/folders/${editingFolder.id}`
+        `https://snap-share.glitch.me/folders/${editingFolder.id}`
       );
       setFolders((prevFolders) =>
         prevFolders.filter((folder) => folder.id !== editingFolder.id)
@@ -109,7 +109,7 @@ const MainPage = React.memo(() => {
       };
 
       await axios.put(
-        `http://localhost:3001/folders/${editingFolder.id}`,
+        `https://snap-share.glitch.me/folders/${editingFolder.id}`,
         payload
       );
 
