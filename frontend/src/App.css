@@ -61,11 +61,11 @@
 }
 
 .full-screen-content {
-  @apply relative flex flex-col items-center justify-center;
+  @apply  flex flex-col items-center justify-center;
 }
 
 .full-screen-image {
-  @apply max-w-[90%] max-h-[80%] rounded-lg;
+  @apply max-w-[900px] max-h-[80%] rounded-lg;
 }
 
 .close-button {

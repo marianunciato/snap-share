@@ -52,7 +52,7 @@ function App() {
               />
               <Route
                 path="/photoshoot/:photoShootId"
-                element={<PhotoShoot maxSelectable={5} />}
+                element={<PhotoShoot />}
               />
             </>
           ) : (

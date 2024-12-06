@@ -14,25 +14,27 @@ const PhotoShootsFromFoldernPage = React.memo(() => {
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const { folderId } = useParams(); // Obtendo o ID do fotógrafo pela rota
   const navigate = useNavigate(); // Hook para navegação
+  const photographer = JSON.parse(sessionStorage.getItem("data-ph"));
 
   // Função para buscar dados da API
   useEffect(() => {
+    !photographer && navigate(`/`);
     const fetchPhotoShoot = async () => {
       try {
         setLoading(true); // Inicia o carregamento
         const response = await axios.get(
-          `https://snap-share.glitch.me/folders/${folderId}/albums`
+          `http://localhost:3001/folders/${folderId}/albums`
         );
         setPhotoShoot(response.data);
 
         const folderResponse = await axios.get(
-          `https://snap-share.glitch.me/folders/${folderId}`
+          `http://localhost:3001/folders/${folderId}`
         );
         setFolder(folderResponse.data);
       } catch (error) {
         console.error("Erro ao buscar ensaios:", error);
         const folderResponse = await axios.get(
-          `https://snap-share.glitch.me/folders/${folderId}`
+          `http://localhost:3001/folders/${folderId}`
         );
         setFolder(folderResponse.data);
       } finally {
@@ -62,10 +64,10 @@ const PhotoShootsFromFoldernPage = React.memo(() => {
   // Função para salvar a edição do ensaio
   const handleSavePhotoShoot = async (updatedData) => {
     try {
-      await axios.put(
-        `https://snap-share.glitch.me/albums/${selectedPhotoShoot.id}`,
-        { ...updatedData, folder_id: folderId }
-      );
+      await axios.put(`http://localhost:3001/albums/${selectedPhotoShoot.id}`, {
+        ...updatedData,
+        folder_id: folderId,
+      });
       setPhotoShoot((prev) =>
         prev.map((photo) =>
           photo.id === selectedPhotoShoot.id
@@ -82,7 +84,7 @@ const PhotoShootsFromFoldernPage = React.memo(() => {
   // Função para excluir o ensaio
   const handleDeletePhotoShoot = async (id) => {
     try {
-      await axios.delete(`https://snap-share.glitch.me/albums/${id}`);
+      await axios.delete(`http://localhost:3001/albums/${id}`);
       setPhotoShoot((prev) => prev.filter((photo) => photo.id !== id));
       setIsModalOpen(false);
     } catch (error) {

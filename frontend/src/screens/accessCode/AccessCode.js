@@ -39,7 +39,7 @@ const Login = ({ isClient }) => {
       try {
         // Requisição para a rota de login do fotógrafo
         const response = await axios.post(
-          "https://snap-share.glitch.me/photographers/login",
+          "http://localhost:3001/photographers/login",
           {
             email,
             password,
@@ -49,7 +49,7 @@ const Login = ({ isClient }) => {
         // Se o login for bem-sucedido
 
         const photographer = await axios.get(
-          `https://snap-share.glitch.me/photographers/${response.data.photographer.id}`
+          `http://localhost:3001/photographers/${response.data.photographer.id}`
         );
         delete photographer.data.password;
         sessionStorage.setItem("data-ph", JSON.stringify(photographer.data));
@@ -65,21 +65,19 @@ const Login = ({ isClient }) => {
       try {
         // Fazendo a requisição à API para validação do cliente
         const response = await axios.get(
-          `https://snap-share.glitch.me/albums/access_hash/${codeValue}`
+          `http://localhost:3001/albums/access_hash/${codeValue}`
         );
         console.log("Dados do cliente:", response.data);
 
         if (response.data.id == id) {
           sessionStorage.setItem("hash-cl", codeValue);
           navigate(`/photoshoot/${id}`);
-        } else {
-          alert(
-            "Não foi possível acessar o álbum com o código informado. Verifique o código e tente novamente."
-          );
-          setCode(Array(6).fill(""));
         }
       } catch (error) {
-        console.error("Erro ao buscar os dados do cliente:", error);
+        alert(
+          "Não foi possível acessar o álbum com o código informado. Verifique o código e tente novamente."
+        );
+        setCode(Array(6).fill(""));
       }
     }
   };
